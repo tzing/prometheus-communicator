@@ -3,6 +3,12 @@ name = "prometheus-communicator"
 version = "0.1.0"
 description = "Web service that transmit the alerts from Prometheus to other places"
 authors = ["Tzu-Ting <tzingshih@gmail.com>"]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: FastAPI",
+    "Topic :: System :: Monitoring",
+]
 
 [tool.poetry.dependencies]
 python = "^3.12"
