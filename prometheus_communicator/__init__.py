@@ -7,7 +7,7 @@ import prometheus_fastapi_instrumentator
 from fastapi import FastAPI, HTTPException, Path, Response
 
 import prometheus_communicator.config
-from prometheus_communicator.model import PrometheusAlertWebhook
+from prometheus_communicator.models import PrometheusAlertWebhook
 
 prometheus_communicator.config.initialize()
 

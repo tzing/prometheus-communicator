@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from prometheus_communicator.handlers import create_handler
 
 if typing.TYPE_CHECKING:
-    from prometheus_communicator.model import Handler
+    from prometheus_communicator.models import Handler
 
 
 logger = logging.getLogger(__name__)

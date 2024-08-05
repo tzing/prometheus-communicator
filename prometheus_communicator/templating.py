@@ -3,7 +3,7 @@ from __future__ import annotations
 import jinja2
 from pydantic import AfterValidator
 
-from prometheus_communicator.model import PrometheusAlert, PrometheusAlertWebhook
+from prometheus_communicator.models import PrometheusAlert, PrometheusAlertWebhook
 
 
 def validate_template(template: jinja2.Template) -> jinja2.Template:

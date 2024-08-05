@@ -9,11 +9,11 @@ import jinja2
 from pydantic import Field, InstanceOf, field_validator
 
 from prometheus_communicator.http import arequest
-from prometheus_communicator.model import Handler
+from prometheus_communicator.models import Handler
 from prometheus_communicator.templating import ValidateTemplate
 
 if TYPE_CHECKING:
-    from prometheus_communicator.model import PrometheusAlertWebhook
+    from prometheus_communicator.models import PrometheusAlertWebhook
 
 logger = logging.getLogger(__name__)
 
