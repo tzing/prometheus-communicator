@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import enum
 import logging
-import typing
+from typing import TYPE_CHECKING, Annotated
 
 import httpx
 import jinja2
@@ -10,8 +10,9 @@ from pydantic import Field, InstanceOf, field_validator
 
 from prometheus_communicator.http import arequest
 from prometheus_communicator.model import Handler
+from prometheus_communicator.templating import ValidateTemplate
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from prometheus_communicator.model import PrometheusAlertWebhook
 
 logger = logging.getLogger(__name__)
@@ -43,7 +44,7 @@ class HttpHandler(Handler):
     """HTTP method to use."""
     headers: dict[str, str] = Field(default_factory=_default_headers)
     """Headers to send with the request. Defaults to JSON content type."""
-    template: InstanceOf[jinja2.Template]
+    template: Annotated[InstanceOf[jinja2.Template], ValidateTemplate]
     """Jinja template to use for the request body."""
     timeout: float = 10.0
     """Timeout for the request."""
