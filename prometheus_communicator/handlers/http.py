@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import enum
-import functools
 import logging
 import typing
 
@@ -9,6 +8,7 @@ import httpx
 import jinja2
 from pydantic import Field, InstanceOf, field_validator
 
+from prometheus_communicator.http import arequest
 from prometheus_communicator.model import Handler
 
 if typing.TYPE_CHECKING:
@@ -45,17 +45,23 @@ class HttpHandler(Handler):
     """Headers to send with the request. Defaults to JSON content type."""
     template: InstanceOf[jinja2.Template]
     """Jinja template to use for the request body."""
+    timeout: float = 10.0
+    """Timeout for the request."""
+    max_attempt_number: int = 3
+    """Maximum number of attempts to send the alert."""
+    wait_multiplier: float = 2.0
+    """Multiplier for the wait time between attempts."""
 
     async def handle(self, payload: PrometheusAlertWebhook) -> None:
         content = self.template.render(payload.model_dump())
-        response = await self.http_client.request(
+        response = await arequest(
             method=self.method,
             url=self.url,
             content=content,
+            timeout=self.timeout,
+            max_attempt_number=self.max_attempt_number,
+            wait_multiplier=self.wait_multiplier,
         )
-
-        print(response.text)
-
         if not response.is_success:
             logger.error(
                 "Failed to send alert to %s: %s %s",
@@ -73,9 +79,3 @@ class HttpHandler(Handler):
     @classmethod
     def _cast_template(cls, value: str) -> jinja2.Template:
         return jinja2.Template(value)
-
-    @functools.cached_property
-    def http_client(self):
-        return httpx.AsyncClient(
-            headers=self.headers,
-        )
